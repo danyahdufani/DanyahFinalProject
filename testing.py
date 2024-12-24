@@ -2,12 +2,11 @@ import unittest
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
-from add_numbers import read_data, filter_data, calculate_average_mortality, create_bar_plot, calculate_time_series, create_time_series_plot
+from graphs import read_data, filter_data, calculate_average_mortality, create_bar_plot, calculate_time_series, create_time_series_plot
 
 class TestGraphFunctions(unittest.TestCase):
 
     def setUp(self):
-        """Ensure the file 'data.xlsx' exists before running the tests."""
         # For the sake of testing, you can create a small test Excel file or assume that it's already there.
         self.file_path = 'data.xlsx'
 
@@ -21,7 +20,7 @@ class TestGraphFunctions(unittest.TestCase):
         df.to_excel(self.file_path, index=False)
 
     def test_read_data(self):
-        """Test that data is read correctly from the file."""
+        #Test that data is read correctly from the file.
         df = read_data(self.file_path)
         self.assertFalse(df.empty, "The data should not be empty.")
         self.assertIn("estimate", df.columns)
@@ -29,7 +28,7 @@ class TestGraphFunctions(unittest.TestCase):
         self.assertIn("date", df.columns)
 
     def test_filter_data(self):
-        """Test the filtering function to remove rows with missing values."""
+        #Test the filtering function to remove rows with missing values
         df = pd.read_excel(self.file_path)
         filtered_df = filter_data(df)
         self.assertFalse(filtered_df.empty, "Filtered DataFrame should not be empty.")
@@ -37,14 +36,14 @@ class TestGraphFunctions(unittest.TestCase):
         self.assertIn("wbincome2024", filtered_df.columns)
 
     def test_calculate_average_mortality(self):
-        """Test the calculation of average mortality by income group."""
+        #Test the calculation of average mortality by income group
         df = pd.read_excel(self.file_path)
         average_mortality = calculate_average_mortality(df)
         self.assertEqual(len(average_mortality), 4, "There should be 4 unique income groups.")
         self.assertTrue(average_mortality.is_monotonic_increasing, "Average mortality should be sorted by income.")
 
     def test_create_bar_plot(self):
-        """Test the bar plot creation by checking if the plot file is saved."""
+        #Test the bar plot creation by checking if the plot file is saved
         output_file = "test_output.png"
         df = pd.read_excel(self.file_path)
         create_bar_plot(df, output_file)
@@ -56,14 +55,14 @@ class TestGraphFunctions(unittest.TestCase):
         os.remove(output_file)
 
     def test_calculate_time_series(self):
-        """Test the calculation of the time series."""
+        #Test the calculation of the time series
         df = pd.read_excel(self.file_path)
         time_series = calculate_time_series(df)
         self.assertEqual(len(time_series), 4, "There should be 4 time points.")
         self.assertTrue(time_series.index.is_monotonic_increasing, "Time series should be sorted by date.")
 
     def test_create_time_series_plot(self):
-        """Test the time series plot creation by checking if the plot file is saved."""
+        #Test the time series plot creation by checking if the plot file is saved
         output_file = "time_series_output.png"
         df = pd.read_excel(self.file_path)
         create_time_series_plot(df, output_file)
