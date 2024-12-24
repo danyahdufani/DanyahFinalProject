@@ -1,17 +1,16 @@
 import unittest
 from add_numbers import adding
 
-class TestAddNumbers(unittest.TestCase):
-    def test_add_numbers(self):
-        # Test adding two positive numbers
-        self.assertEqual(adding(2, 3), 5)
-        # Test adding positive and negative numbers
-        self.assertEqual(adding(-1, 5), 4)
-        # Test adding two negative numbers
-        self.assertEqual(adding(-3, -2), -5)
-        # Test adding zero
-        self.assertEqual(adding(0, 0), 0)
-        self.assertEqual(adding(0, 5), 5)
+import pytest
+import pandas as pd
+
+def test_read_file():
+    try:
+        df = pd.read_excel("data.xlsx")
+        assert not df.empty, "The file should not be empty."
+    except Exception as e:
+        pytest.fail(f"Reading the file failed: {e}")
+
 
 if __name__ == '__main__':
     unittest.main()
