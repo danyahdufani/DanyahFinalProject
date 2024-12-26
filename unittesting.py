@@ -2,7 +2,7 @@ import unittest
 import pandas as pd
 import os
 import numpy as np
-from DanyahFinalProject.data.graphs import (read_data, filter_data, encode_income_groups,
+from graphs import (read_data, filter_data, encode_income_groups,
                          calculate_average_mortality, create_bar_chart_with_numbers,
                          create_line_plot_by_income_group, create_map_plot,
                          correlation_analysis, statistical_analysis_pipeline)

@@ -161,7 +161,7 @@ def statistical_analysis_pipeline(df):
 
 # Main execution
 if __name__ == "__main__":
-    file_path = "data/data.xlsx"  # Update with your actual data file path
+    file_path = os.path.join('data', 'data.xlsx')  # Update with your actual data file path
     df = read_data(file_path)
 
     # Encode income groups
