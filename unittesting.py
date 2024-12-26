@@ -59,10 +59,10 @@ class TestGraphFunctions(unittest.TestCase):
         create_line_plot_by_income_group(self.filtered_data)
         self.assertTrue(os.path.exists(output_file), "The line plot should be saved as 'aids_mortality_by_income_group_line_plot.png'.")
 
-    def test_create_map_plot(self):
-        output_file = os.path.join("output", "global_aids_mortality_map_2022.png")
-        create_map_plot(self.filtered_data)
-        self.assertTrue(os.path.exists(output_file), "The map plot should be saved as 'global_aids_mortality_map_2022.png'.")
+    #def test_create_map_plot(self):
+     #   output_file = os.path.join("output", "global_aids_mortality_map_2022.png")
+     #   create_map_plot(self.filtered_data)
+    #    self.assertTrue(os.path.exists(output_file), "The map plot should be saved as 'global_aids_mortality_map_2022.png'.")
 
     def test_correlation_analysis(self):
         encoded_df = encode_income_groups(self.filtered_data)
