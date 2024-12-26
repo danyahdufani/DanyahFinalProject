@@ -31,7 +31,12 @@ def encode_income_groups(df):
         "Lower middle income": 2,
         "Low income": 1
     }
-    df["income_encoded"] = df["wbincome2024"].map(income_mapping)
+    df.loc[:, "income_encoded"] = df["wbincome2024"].map(income_mapping)  # Prevent SettingWithCopyWarning
+
+    # Optional: Handle NaN values for unmatched categories
+    # You can choose to fill NaN with a specific value or drop them
+    # df["income_encoded"].fillna(0, inplace=True)  # Example filling with 0 for unmatched
+    
     return df
 
  # Check all column names in the DataFrame

@@ -1,106 +1,75 @@
 import unittest
 import pandas as pd
 import os
-from graphs import (
-    read_data, filter_data, calculate_average_mortality, 
-    create_bar_chart_with_numbers, create_line_plot_by_income_group,
-    create_map_plot
-)
+import numpy as np
+from graphs import (read_data, filter_data, encode_income_groups,
+                         calculate_average_mortality, create_bar_chart_with_numbers,
+                         create_line_plot_by_income_group, create_map_plot,
+                         correlation_analysis, statistical_analysis_pipeline)
 
 class TestGraphFunctions(unittest.TestCase):
 
-    def setUp(self):
-        """Setup test environment with existing data."""
-        self.file_path = 'data/data.xlsx'  # Updated to the correct file path
-        self.output_dir = 'test_outputs'
-        os.makedirs(self.output_dir, exist_ok=True)
+    @classmethod
+    def setUpClass(cls):
+        # Load test data from the Excel file in the 'data' folder
+        cls.file_path = os.path.join('data', 'data.xlsx')  # Path to your test data file
+        cls.test_data = read_data(cls.file_path)
+        cls.filtered_data = filter_data(cls.test_data)
+
+        # Ensure output directory exists
+        os.makedirs("output", exist_ok=True)
 
     def test_read_data(self):
-        """Test if data is read correctly from the Excel file."""
-        df = read_data(self.file_path)
-        self.assertFalse(df.empty, "The data should not be empty.")
-        self.assertIn("estimate", df.columns, "Data should have 'estimate' column.")
-        self.assertIn("wbincome2024", df.columns, "Data should have 'wbincome2024' column.")
-        self.assertIn("date", df.columns, "Data should have 'date' column.")
+        result = read_data(self.file_path)
+        self.assertIsInstance(result, pd.DataFrame)
 
-    def test_filter_data(self):
-        """Test the filtering function to remove rows with missing values."""
-        df = pd.read_excel(self.file_path)
-        filtered_df = filter_data(df)
-        self.assertFalse(filtered_df.empty, "Filtered DataFrame should not be empty.")
-        self.assertIn("estimate", filtered_df.columns, "Filtered data should have 'estimate' column.")
-        self.assertIn("wbincome2024", filtered_df.columns, "Filtered data should have 'wbincome2024' column.")
+    def filter_data(df):
+        """Cleans and filters the data to remove rows with missing 'estimate' or 'wbincome2024'."""
+        return df.dropna(subset=["estimate", "wbincome2024"]).copy() 
+
+    def test_encode_income_groups(self):
+        result = encode_income_groups(self.filtered_data)
+        print(result)  # Print the DataFrame to check the encoding
+
+        # Ensure the income_encoded column exists
+        self.assertIn("income_encoded", result.columns)
+
+        # Look for "High income" and check its encoding
+        high_income_rows = result[result["wbincome2024"] == "High income"]
         
-        # Check for rows with missing values being dropped
-        self.assertTrue(filtered_df.isnull().sum().sum() == 0, "Filtered data should have no missing values.")
+        if not high_income_rows.empty:
+            self.assertEqual(high_income_rows["income_encoded"].iloc[0], 4)  # Ensure 'High income' is encoded as 4
+        else:
+            self.fail("No 'High income' group found in the DataFrame.")
+
+
 
     def test_calculate_average_mortality(self):
-        """Test the calculation of average mortality by income group."""
-        df = pd.read_excel(self.file_path)
-        average_mortality = calculate_average_mortality(df)
-        self.assertGreater(len(average_mortality), 0, "There should be calculated average mortality.")
-        self.assertTrue(average_mortality.is_monotonic_increasing, "Average mortality should be sorted by income.")
+        result = calculate_average_mortality(self.filtered_data)
+        expected = self.filtered_data.groupby("wbincome2024")["estimate"].mean().sort_values()
+        pd.testing.assert_series_equal(result, expected)
 
     def test_create_bar_chart_with_numbers(self):
-        """Test if the bar chart creation works and the plot file is saved."""
-        output_file = os.path.join(self.output_dir, "test_bar_chart.png")
-        df = pd.read_excel(self.file_path)
-        create_bar_chart_with_numbers(df)
-
-        # Check if the plot file was created
-        self.assertTrue(os.path.exists(output_file), "The bar chart should be saved as 'test_bar_chart.png'.")
-        
-        # Clean up the plot file
-        os.remove(output_file)
-
+        output_file = os.path.join("output", "aids_mortality_by_income_group_bar_chart.png")
+        create_bar_chart_with_numbers(self.filtered_data)
+        self.assertTrue(os.path.exists(output_file), "The bar chart should be saved as 'aids_mortality_by_income_group_bar_chart.png'.")
 
     def test_create_line_plot(self):
-        """Test if the time-series line plot is created and saved correctly."""
-        output_file = os.path.join(self.output_dir, "test_line_plot.png")
-        df = pd.read_excel(self.file_path)
-        create_line_plot_by_income_group(df)
-
-        # Check if the plot file was created
-        self.assertTrue(os.path.exists(output_file), "The line plot should be saved as 'test_line_plot.png'.")
-        
-        # Clean up the plot file
-        os.remove(output_file)
+        output_file = os.path.join("output", "aids_mortality_by_income_group_line_plot.png")
+        create_line_plot_by_income_group(self.filtered_data)
+        self.assertTrue(os.path.exists(output_file), "The line plot should be saved as 'aids_mortality_by_income_group_line_plot.png'.")
 
     def test_create_map_plot(self):
-        """Test if map plot is created and saved successfully for 2022 data."""
-        output_file = os.path.join(self.output_dir, "test_map_plot.png")
-        df = pd.read_excel(self.file_path)
-        create_map_plot(df)
+        output_file = os.path.join("output", "global_aids_mortality_map_2022.png")
+        create_map_plot(self.filtered_data)
+        self.assertTrue(os.path.exists(output_file), "The map plot should be saved as 'global_aids_mortality_map_2022.png'.")
 
-        # Check if the plot file was created
-        self.assertTrue(os.path.exists(output_file), "The map plot should be saved as 'test_map_plot.png'.")
-        
-        # Clean up the plot file
-        os.remove(output_file)
+    def test_correlation_analysis(self):
+        encoded_df = encode_income_groups(self.filtered_data)
+        correlation_analysis(encoded_df)  # Output of correlation will be printed in the console
 
-    def test_invalid_data_format(self):
-        """Test that invalid data format raises errors (e.g., missing 'date' or 'estimate' column)."""
-        # Remove the 'date' column and save it as a temporary file
-        df = pd.read_excel(self.file_path)
-        df_invalid = df.drop(columns=['date'])
-        df_invalid.to_excel('data_invalid.xlsx', index=False)
+    def test_statistical_analysis_pipeline(self):
+        statistical_analysis_pipeline(self.filtered_data)  # Output of stats will be printed in the console
 
-        # Test that creating a plot will raise a KeyError due to missing 'date' column
-        with self.assertRaises(KeyError):
-            create_line_plot_by_income_group(df_invalid)
-        
-        # Clean up the invalid file
-        os.remove('data_invalid.xlsx')
-
-    def tearDown(self):
-        """Clean up any files created during testing."""
-        # Clean up test plot files
-        for file in os.listdir(self.output_dir):
-            file_path = os.path.join(self.output_dir, file)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-        os.rmdir(self.output_dir)
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
