@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from graphs import (
     read_data, filter_data, calculate_average_mortality, 
-    create_bar_chart_with_numbers, calculate_time_series, create_line_plot, 
+    create_bar_chart_with_numbers, create_line_plot_by_income_group,
     create_map_plot
 )
 
@@ -53,18 +53,12 @@ class TestGraphFunctions(unittest.TestCase):
         # Clean up the plot file
         os.remove(output_file)
 
-    def test_calculate_time_series(self):
-        """Test the time series calculation function."""
-        df = pd.read_excel(self.file_path)
-        time_series = calculate_time_series(df)
-        self.assertGreater(len(time_series), 0, "There should be calculated time series.")
-        self.assertTrue(time_series.index.is_monotonic_increasing, "Time series should be sorted by date.")
 
     def test_create_line_plot(self):
         """Test if the time-series line plot is created and saved correctly."""
         output_file = os.path.join(self.output_dir, "test_line_plot.png")
         df = pd.read_excel(self.file_path)
-        create_line_plot(df)
+        create_line_plot_by_income_group(df)
 
         # Check if the plot file was created
         self.assertTrue(os.path.exists(output_file), "The line plot should be saved as 'test_line_plot.png'.")
@@ -93,7 +87,7 @@ class TestGraphFunctions(unittest.TestCase):
 
         # Test that creating a plot will raise a KeyError due to missing 'date' column
         with self.assertRaises(KeyError):
-            create_line_plot(df_invalid)
+            create_line_plot_by_income_group(df_invalid)
         
         # Clean up the invalid file
         os.remove('data_invalid.xlsx')
