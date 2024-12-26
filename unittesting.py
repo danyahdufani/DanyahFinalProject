@@ -23,9 +23,9 @@ class TestGraphFunctions(unittest.TestCase):
         result = read_data(self.file_path)
         self.assertIsInstance(result, pd.DataFrame)
 
-    def filter_data(df):
+    #def filter_data(df):
         """Cleans and filters the data to remove rows with missing 'estimate' or 'wbincome2024'."""
-        return df.dropna(subset=["estimate", "wbincome2024"]).copy() 
+     #   return df.dropna(subset=["estimate", "wbincome2024"]).copy() 
 
     def test_encode_income_groups(self):
         result = encode_income_groups(self.filtered_data)
