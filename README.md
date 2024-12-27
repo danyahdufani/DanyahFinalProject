@@ -8,6 +8,7 @@ This project analyses AIDS mortality rates across regions, income groups and ove
 ## Table of Contents 
 - [Repository](#RepositoryStructure)
 - [Installation](#installation)
+- [CircleCi](#circleci)
 
 
 
@@ -35,6 +36,8 @@ This project analyses AIDS mortality rates across regions, income groups and ove
 7.unittestdescription.txt:
 A text file which contains descriptions of each of the unit tests, helping explain their purpose
 
+8.CircleCi.png - an image showing successful run with all unit tests passing, also includes date in top right corner
+
 
 ## Installation 
 To run this project, clone the repository and install the required dependencies: 
@@ -45,4 +48,7 @@ https://github.com/danyahdufani/DanyahFinalProject.git
 2.To run the analysis script use the following command:
 python graphs.py 
 
+# CircleCi
+https://app.circleci.com/pipelines/circleci/LL5HkHxbczorHiL7dHKdYm/RzRvn63zpoaL2eexxBsgjD
+Go to CircleCi.png - an image showing successful run with all unit tests passing, also includes date in top right corner
 

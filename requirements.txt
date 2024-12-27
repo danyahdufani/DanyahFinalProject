@@ -1,7 +1,7 @@
 pandas
 matplotlib
 seaborn
-geopandas
+geopandas==0.14.4 # must have this version to work with fiona or will result in error
 numpy
 scipy
 scikit-learn

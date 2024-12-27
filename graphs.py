@@ -8,19 +8,19 @@ import scipy.stats as stats
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 
-# Set Seaborn style for aesthetic improvement
+# Set Seaborn style 
 sns.set(style="whitegrid", palette="muted")
 
-# Ensure output folder exists
+# Check output folder exists
 output_folder = "output"
 os.makedirs(output_folder, exist_ok=True)
 
+#Reads data from an Excel file.
 def read_data(file_path):
-    """Reads data from an Excel file."""
     return pd.read_excel(file_path)
 
+#Cleans and filters the data to remove rows with missing 'estimate' or 'wbincome2024'
 def filter_data(df):
-    """Cleans and filters the data to remove rows with missing 'estimate' or 'wbincome2024'."""
     return df.dropna(subset=["estimate", "wbincome2024"])
 
 def encode_income_groups(df):
@@ -33,21 +33,17 @@ def encode_income_groups(df):
     }
     df.loc[:, "income_encoded"] = df["wbincome2024"].map(income_mapping)  # Prevent SettingWithCopyWarning
 
-    # Optional: Handle NaN values for unmatched categories
-    # You can choose to fill NaN with a specific value or drop them
-    # df["income_encoded"].fillna(0, inplace=True)  # Example filling with 0 for unmatched
-    
     return df
 
- # Check all column names in the DataFrame
+ 
 
+#Calculates the average mortality rate by income group.
 def calculate_average_mortality(df):
-    """Calculates the average mortality rate by income group."""
     filtered_df = filter_data(df)
     return filtered_df.groupby("wbincome2024")["estimate"].mean().sort_values()
 
+#Creates and saves a bar chart of AIDS mortality rates by income group with numbers displayed above the bars
 def create_bar_chart_with_numbers(df):
-    """Creates and saves a bar chart of AIDS mortality rates by income group with numbers displayed above the bars."""
     average_mortality = calculate_average_mortality(df)
 
     plt.figure(figsize=(12, 7))
@@ -75,8 +71,8 @@ def create_bar_chart_with_numbers(df):
     plt.savefig(os.path.join(output_folder, "aids_mortality_by_income_group_bar_chart.png"))
     plt.close()
 
+#Creates and saves a line plot of AIDS mortality trends over time (2000-2022) by income group
 def create_line_plot_by_income_group(df):
-    """Creates and saves a line plot of AIDS mortality trends over time (2000-2022) by income group."""
     filtered_df = df[df["date"].between(2000, 2022)]
     time_series_by_income = filtered_df.groupby(["date", "wbincome2024"])["estimate"].mean().unstack()
 
@@ -107,8 +103,8 @@ def create_line_plot_by_income_group(df):
     plt.savefig(os.path.join(output_folder, "aids_mortality_by_income_group_line_plot.png"))
     plt.close()
 
+#Creates and saves a corrected world map showing AIDS-related deaths by country for 2022
 def create_map_plot(df):
-    """Creates and saves a corrected world map showing AIDS-related deaths by country for 2022."""
     aggregated_data = df[df["date"] == 2022].groupby("setting")["estimate"].sum().reset_index()
     aggregated_data.rename(columns={"setting": "country", "estimate": "total_deaths"}, inplace=True)
 
@@ -137,8 +133,8 @@ def create_map_plot(df):
     plt.savefig(os.path.join(output_folder, "global_aids_mortality_map_2022.png"))
     plt.close()
 
+# Performs correlation analysis
 def correlation_analysis(df):
-    """Performs correlation analysis."""
     if "income_encoded" not in df.columns:
         print("Column 'income_encoded' not found. Encoding it now.")
         df = encode_income_groups(df)
@@ -152,8 +148,8 @@ def correlation_analysis(df):
     print(f"Pearson Correlation: {correlation:.3f}")
     print(f"P-value: {p_value:.3e}")
 
+#Performs statistical and descriptive analysis
 def statistical_analysis_pipeline(df):
-    """Performs statistical and descriptive analysis."""
     print("--- Descriptive Statistics ---")
     print(df.groupby("wbincome2024")["estimate"].describe())
 
