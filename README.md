@@ -3,7 +3,7 @@
 # AIDS Mortality Analysis 
 
 ## Description of Project
-This project analyses AIDS mortality rates across regions, income groups and over the years. It provides data visualization and statistical analysis to understand trends and patterns in AIDS-related deaths globally.
+This project analyses AIDS mortality rates across regions, income groups and over the years. It provides data visualisation and statistical analysis to understand trends and patterns in AIDS-related deaths globally.
 
 ## Table of Contents 
 - [Repository](#RepositoryStructure)
