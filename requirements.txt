@@ -8,3 +8,5 @@ scikit-learn
 pytest
 openpyxl 
 fiona>=1.10.0 #needs speicifc version to prevent error
+
+#verifying changes after rebasing
