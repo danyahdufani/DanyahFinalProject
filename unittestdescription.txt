@@ -1,0 +1,33 @@
+    Unit tests are included in the unittesting.py file.
+    Breakdown of unit tests: 
+    
+    1 - test_read_data - this test will check that the read_data function can sucessfully
+    read from the excel file and returns the data as a Pandas DataFrame
+
+    2 - test_encode_income_groups tests that the encode_income_grouos function to check 
+    that the income categories in the wbincome2024 column are encoded correctly to numerical values. 
+    E.g. it checks that high income is encoded as 4. If this is not found then the test will fail
+
+    3 - test_calculate_average_mortality tests the function test_calculate_average_mortality to check
+     that it calaulcates the mean estmate of mortality rates accurately by income group. It does this 
+     by aserting that the computed values match the expected averages based on the filtered input data 
+
+    4 - test_create_bar_chart_with_numbers verifies that the function test_create_bar_chart_with_numbers
+    generates a bar chart of AIDS mortality rates by income grouo and cheks that its saved as a PNG to the 
+    output directory. This test checks that an output file exists 
+
+    5 - test_create_line_plot tests that the function create_line_plot_by_income_group to check that 
+    it creates a line plot of AIDS mortality trends over time and saves it correctly as a PNG file. 
+    The test checks for the file's existence after the plotting operation.
+
+    6 - test_correlation_analysis  Runs the correlation_analysis function to verify that it can 
+    successfully perform correlation analysis on the encoded income groups and mortality estimates. 
+    The output is printed to the terminal
+
+    7 - test_statistical_analysis_pipeline tests the function statistical_analysis_pipeline to ensure that 
+    it executes without errors and performs statisctial analyses on the filtered data. This will print output 
+    to the terminal. 
+
+    8 - test_avaerage_morta;ity_large_dataset tests the performance and checks the correctness of the 
+    calculate_avaerage_mortality function when using a large dataset of 1,000,000 rows. This test will check 
+    whether the output is not empty and verifies the processing time using a threshold.

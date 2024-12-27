@@ -3,9 +3,8 @@ import pandas as pd
 import os
 import numpy as np
 from graphs import (read_data, filter_data, encode_income_groups,
-                         calculate_average_mortality, create_bar_chart_with_numbers,
-                         create_line_plot_by_income_group, create_map_plot,
-                         correlation_analysis, statistical_analysis_pipeline)
+                         calculate_average_mortality, create_bar_chart_with_numbers, create_map_plot,
+                         create_line_plot_by_income_group, correlation_analysis, statistical_analysis_pipeline)
 
 class TestGraphFunctions(unittest.TestCase):
 
@@ -22,10 +21,6 @@ class TestGraphFunctions(unittest.TestCase):
     def test_read_data(self):
         result = read_data(self.file_path)
         self.assertIsInstance(result, pd.DataFrame)
-
-    #def filter_data(df):
-        """Cleans and filters the data to remove rows with missing 'estimate' or 'wbincome2024'."""
-     #   return df.dropna(subset=["estimate", "wbincome2024"]).copy() 
 
     def test_encode_income_groups(self):
         result = encode_income_groups(self.filtered_data)
@@ -59,17 +54,30 @@ class TestGraphFunctions(unittest.TestCase):
         create_line_plot_by_income_group(self.filtered_data)
         self.assertTrue(os.path.exists(output_file), "The line plot should be saved as 'aids_mortality_by_income_group_line_plot.png'.")
 
-    #def test_create_map_plot(self):
-     #   output_file = os.path.join("output", "global_aids_mortality_map_2022.png")
-     #   create_map_plot(self.filtered_data)
-    #    self.assertTrue(os.path.exists(output_file), "The map plot should be saved as 'global_aids_mortality_map_2022.png'.")
-
     def test_correlation_analysis(self):
         encoded_df = encode_income_groups(self.filtered_data)
         correlation_analysis(encoded_df)  # Output of correlation will be printed in the console
 
     def test_statistical_analysis_pipeline(self):
         statistical_analysis_pipeline(self.filtered_data)  # Output of stats will be printed in the console
+
+    def test_average_mortality_large_dataset(self):
+        """Test performance and correctness on a large dataset."""
+        large_data = pd.DataFrame({
+            "wbincome2024": np.random.choice(["High income", "Low income"], size=1_000_000),
+            "estimate": np.random.rand(1_000_000) * 100  # Random estimates
+        })
+
+        import time
+        start_time = time.time()
+        
+        result = calculate_average_mortality(large_data)
+        
+        end_time = time.time()
+        
+        # Ensure results are computed
+        self.assertFalse(result.empty, "Results should not be empty.")
+        self.assertLess(end_time - start_time, 1, "Performance test took too long.")    
 
 if __name__ == "__main__":
     unittest.main()
