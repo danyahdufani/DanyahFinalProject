@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import numpy as np
 from graphs import (read_data, filter_data, encode_income_groups,
-                         calculate_average_mortality, create_bar_chart_with_numbers, create_map_plot,
+                         calculate_average_mortality, create_bar_chart_with_numbers,
                          create_line_plot_by_income_group, correlation_analysis, statistical_analysis_pipeline)
 
 class TestGraphFunctions(unittest.TestCase):
@@ -23,7 +23,7 @@ class TestGraphFunctions(unittest.TestCase):
         result = read_data(self.file_path)
         self.assertIsInstance(result, pd.DataFrame)
     
-    #Checks if income grouos are encoded correctly
+    #Checks if income groups are encoded correctly
     def test_encode_income_groups(self):
         result = encode_income_groups(self.filtered_data)
         print(result)  # Print the DataFrame to check the encoding
@@ -59,18 +59,18 @@ class TestGraphFunctions(unittest.TestCase):
 
     def test_correlation_analysis(self):
         encoded_df = encode_income_groups(self.filtered_data)
-        correlation_analysis(encoded_df)  # Output of correlation will be printed in the console
+        correlation_analysis(encoded_df)  
 
     #  Checks it executes without errors and performs statisctial analyses on the filtered data
     def test_statistical_analysis_pipeline(self):
-        statistical_analysis_pipeline(self.filtered_data)  # Output of stats will be printed in the console
+        statistical_analysis_pipeline(self.filtered_data)  
 
 
     #Test performance and correctness on a large dataset
     def test_average_mortality_large_dataset(self):
         large_data = pd.DataFrame({
             "wbincome2024": np.random.choice(["High income", "Low income"], size=1_000_000),
-            "estimate": np.random.rand(1_000_000) * 100  # Random estimates
+            "estimate": np.random.rand(1_000_000) * 100  
         })
 
         import time
