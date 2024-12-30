@@ -36,7 +36,7 @@ This project analyses AIDS mortality rates across regions, income groups and ove
 7.unittestdescription.txt:
 A text file which contains descriptions of each of the unit tests, helping explain their purpose
 
-8.CircleCi.png - an image showing successful run with all unit tests passing, also includes date in top right corner
+8.CircleCi.png - an image showing successful run with all unit tests passing, also includes date and time in top right corner
 
 
 ## Installation 
