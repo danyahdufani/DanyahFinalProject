@@ -1,9 +1,16 @@
-# DanyahFinalProject
+# Author
+Danyah Dufani
+Queen Mary University London 
+Date: 23/12/2024 - 10/01/2025
 
 # AIDS Mortality Analysis 
 
 ## Description of Project
 This project analyses AIDS mortality rates across regions, income groups and over the years. It provides data visualisation and statistical analysis to understand trends and patterns in AIDS-related deaths globally.
+
+## Data Source
+The data used was sourced from the World Health Organisation using this link: https://www.who.int/data/inequality-monitor/data#PageContent_C687_Col00
+
 
 ## Table of Contents 
 - [Repository](#RepositoryStructure)
